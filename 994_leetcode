@@ -1,0 +1,42 @@
+ minimum time required to infect all oranges, in case of minimum time, levelwise traversal is required why??
+
+ 
+ int orangesRotting(vector<vector<int>>& grid) {
+        int cnt=0,ans=0;
+        queue<pair<pair<int,int>,int>>q; //queue to store each element traversed from top to bottom, along with the minimum cost it bears
+        int n=grid.size(),m=grid[0].size();
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==2){
+                    q.push({{i,j},0}); //infected fruits require time zero, so insert them in queue, with price zero
+                }if(grid[i][j]==1){
+                    cnt++;  // maintaining a cnt, to store the number of good fruits..
+                }
+            }
+        } 
+        // 4 directions are up,down,right,left
+        int drow[]={-1,0,1,0}; // row array to travel in all 4 directions
+        int dcol[]={0,1,0,-1}; // column array to travel in all 4 directions 
+
+        while(!q.empty()){ // BFS implementation using queue
+            int r=q.front().first.first; //accessing index of elements that are infected
+            int c=q.front().first.second;
+            int t=q.front().second; // accessing cost involved in infecting these fruits
+            ans=max(ans,t); // keeping track of the maximum value found till now.
+            q.pop();
+            for(int i=0;i<4;i++){
+               int rn=r+drow[i]; // new row index
+               int cn=c+dcol[i]; // new column index
+              if(rn<n && rn>=0 && cn>=0 && cn<m && grid[rn][cn]==1){ //marking good fruit as infected, if it is contact of infected one
+                  q.push({{rn,cn},t+1});
+                  grid[rn][cn]=2;
+                  cnt--;
+              }
+            }
+        }
+        if(cnt==0){
+            return ans;
+        }
+        return -1;
+    }
