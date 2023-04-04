@@ -5,28 +5,27 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    bool dfs(int src,vector<int>adj[],vector<int>&vis,vector<int>&path){
-            vis[src]=true;
-            path[src]=true;
-            
-            for(auto i:adj[src]){
-                if(!vis[i]){
-                    if(dfs(i,adj,vis,path))return true;
-                }else if(path[i]){
-                    return true;
-                }
+    int solve(vector<int>adj[],int src,vector<bool>&vis,vector<bool>&path){
+        path[src]=true;
+        vis[src]=true;
+        
+        for(auto i:adj[src]){
+            if(!vis[i] && !path[i]){
+                if(solve(adj,i,vis,path))return true;
+            }else if(path[i]){
+                return true;
             }
-          path[src]=false;
-          return false;
+        }
+        path[src]=false;
+        return false;
     }
-  
-    bool isCyclic(int V, vector<int> adj[]) {
-        vector<int>vis(V,false);
-        vector<int>path(V,false);
+    
+    bool isCyclic(int V,vector<int>adj[]) {
+        vector<bool>vis(V,false),path(V,false);
         for(int i=0;i<V;i++){
             if(!vis[i]){
-               if(dfs(i,adj,vis,path))return true;
-            }
+                if(solve(adj,i,vis,path))return true;
+            }    
         }return false;
     }
 };
