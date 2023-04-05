@@ -5,26 +5,31 @@ using namespace std;
 // } Driver Code Ends
 class Solution{
 	public: 
-	void dfs(int src,stack<int>&st,vector<bool>&vis,vector<int>adj[]){
-	        vis[src]=true;
-	        for(auto i:adj[src]){
-	               if(!vis[i])dfs(i,st,vis,adj);           
-	        }
-	        st.push(src);
-	}
 	
 	vector<int>topoSort(int V,vector<int>adj[]) {
-	    stack<int>st;
-	    vector<bool>vis(V,false);
-	    for(int i=0;i<V;i++){
-	        if(!vis[i])dfs(i,st,vis,adj);
-	    }
-	    vector<int>ans;
-	    while(!st.empty()){
-	        ans.push_back(st.top());
-	        st.pop();
-	    }
-	    return ans;
+	        vector<int>indegree(V,0),ans;
+	        queue<int>q;
+	        for(int i=0;i<V;i++){
+	            for(auto it:adj[i]){
+	                indegree[it]++;
+	            }
+	        }
+	     for(int i=0;i<V;i++){
+	         if(indegree[i]==0){
+	             q.push(i);
+	         }
+	     }
+	     while(!q.empty()){
+	         int tp=q.front();
+	         ans.push_back(tp);
+	         q.pop();
+	         for(auto i:adj[tp]){
+	             indegree[i]--;
+	             if(indegree[i]==0){
+	                 q.push(i);
+	             }
+	         }
+	     }return ans;
 	}
 };
 
