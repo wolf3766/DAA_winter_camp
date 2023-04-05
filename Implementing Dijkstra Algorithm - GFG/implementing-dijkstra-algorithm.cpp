@@ -12,7 +12,6 @@ class Solution{
             dist[S]=0;
             pq.push({0,S});
             while(!pq.empty()){
-                int wt=pq.top().first;
                 int node=pq.top().second;
                 pq.pop();
                 for(auto i:adj[node]){
